@@ -78,4 +78,21 @@ public class Transaction {
     public void setType(String type) {
         this.type = type;
     }
+
+    public boolean makeTransaction() {
+        if (senderAccount != null && receiverAccount != null && amount > 0) {
+            double initialSenderBalance = senderAccount.getBalance();
+            double initialReceiverBalance = receiverAccount.getBalance();
+
+            if (senderAccount.withdraw(amount) && receiverAccount.deposit(amount, senderAccount)) {
+                return true;
+            } else {
+                senderAccount.setBalance(initialSenderBalance);
+                receiverAccount.setBalance(initialReceiverBalance);
+                return false;
+            }
+        }
+        return false;
+    }
+
 }
