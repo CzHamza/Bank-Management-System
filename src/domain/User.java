@@ -77,4 +77,13 @@ public class User {
         this.accounts = accounts;
     }
 
+    public Account createAccount(String accountType, double initialBalance) {
+        Account newAccount = new Account();
+        newAccount.setAccountType(accountType);
+        newAccount.setBalance(initialBalance);
+        this.accounts.add(newAccount);
+        return newAccount;
+    }
+
+
 }
