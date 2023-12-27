@@ -53,19 +53,20 @@ public class Account {
     }
 
     public boolean deposit(double amount, Account sender) {
+        Transaction depositTransaction = new Transaction(
+                LocalDate.now(),
+                amount,
+                "Deposit",
+                sender,
+                this,
+                "Deposit"
+        );
+
+        this.transactions.add(depositTransaction);
         if (amount > 0) {
             this.balance += amount;
 
-            Transaction depositTransaction = new Transaction(
-                    LocalDate.now(),
-                    amount,
-                    "Deposit",
-                    sender,
-                    this,
-                    "Deposit"
-            );
 
-            this.transactions.add(depositTransaction);
 
             System.out.println("Deposit of " + amount + " made successfully.");
             return true;

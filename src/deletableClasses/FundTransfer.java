@@ -1,4 +1,6 @@
-package domain;
+package deletableClasses;
+
+import domain.Account;
 
 public class FundTransfer {
 
