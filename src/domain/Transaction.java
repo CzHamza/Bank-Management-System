@@ -1,16 +1,27 @@
 package domain;
 
 
+import java.time.LocalDate;
 import java.util.Date;
 
 public class Transaction {
     private Long id;
-    private Date date;
+    private LocalDate date;
     private double amount;
     private String description;
     private Account senderAccount;
     private Account receiverAccount;
     private String type;
+
+    public Transaction(LocalDate date, double amount, String description, Account senderAccount, Account receiverAccount, String type) {
+        this.date = date;
+        this.amount = amount;
+        this.description = description;
+        this.senderAccount = senderAccount;
+        this.receiverAccount = receiverAccount;
+        this.type = type;
+    }
+
 
     public Long getId() {
         return id;
@@ -20,11 +31,11 @@ public class Transaction {
         this.id = id;
     }
 
-    public Date getDate() {
+    public LocalDate getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(LocalDate date) {
         this.date = date;
     }
 
