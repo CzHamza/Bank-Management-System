@@ -2,7 +2,7 @@ package domain;
 
 
 import java.time.LocalDate;
-import java.util.Date;
+import java.util.List;
 
 public class Transaction {
     private Long id;
@@ -85,6 +85,7 @@ public class Transaction {
             double initialReceiverBalance = receiverAccount.getBalance();
 
             if (senderAccount.withdraw(amount) && receiverAccount.deposit(amount, senderAccount)) {
+                logTransaction();
                 return true;
             } else {
                 senderAccount.setBalance(initialSenderBalance);
@@ -93,6 +94,16 @@ public class Transaction {
             }
         }
         return false;
+    }
+
+    public void logTransaction() {
+        System.out.println("Transaction ID: " + id);
+        System.out.println("Date: " + date);
+        System.out.println("Amount: " + amount);
+        System.out.println("Description: " + description);
+        System.out.println("Sender Account: " + senderAccount.getId());
+        System.out.println("Receiver Account: " + receiverAccount.getId());
+        System.out.println("Type: " + type);
     }
 
 }
