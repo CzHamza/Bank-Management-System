@@ -1,6 +1,8 @@
 package domain;
 
 
+import Services.TransactionLogger;
+
 import java.time.LocalDate;
 import java.util.List;
 
@@ -80,12 +82,13 @@ public class Transaction {
     }
 
     public boolean makeTransaction() {
+        TransactionLogger transactionLogger = new TransactionLogger();
         if (senderAccount != null && receiverAccount != null && amount > 0) {
             double initialSenderBalance = senderAccount.getBalance();
             double initialReceiverBalance = receiverAccount.getBalance();
 
             if (senderAccount.withdraw(amount) && receiverAccount.deposit(amount, senderAccount)) {
-                logTransaction();
+                transactionLogger.logTransaction(this);
                 return true;
             } else {
                 senderAccount.setBalance(initialSenderBalance);
@@ -96,14 +99,5 @@ public class Transaction {
         return false;
     }
 
-    public void logTransaction() {
-        System.out.println("Transaction ID: " + id);
-        System.out.println("Date: " + date);
-        System.out.println("Amount: " + amount);
-        System.out.println("Description: " + description);
-        System.out.println("Sender Account: " + senderAccount.getId());
-        System.out.println("Receiver Account: " + receiverAccount.getId());
-        System.out.println("Type: " + type);
-    }
 
 }
