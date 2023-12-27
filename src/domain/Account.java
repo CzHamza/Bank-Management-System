@@ -52,7 +52,7 @@ public class Account {
         this.transactions = transactions;
     }
 
-    public void deposit(double amount, Account sender) {
+    public boolean deposit(double amount, Account sender) {
         if (amount > 0) {
             this.balance += amount;
 
@@ -68,10 +68,13 @@ public class Account {
             this.transactions.add(depositTransaction);
 
             System.out.println("Deposit of " + amount + " made successfully.");
+            return true;
         } else {
             System.out.println("Invalid deposit amount. Please provide a positive value.");
+            return false;
         }
     }
+
 
     public boolean withdraw(double amount) {
         Date date = new Date();
@@ -117,6 +120,80 @@ public class Account {
         }
     }
 
+    public List<Transaction> showHistory(){
+        for(Transaction transaction: transactions){
+            System.out.println(transaction.getDescription());
+        }
+        return this.transactions;
+    }
+
+    public boolean cancelTransaction(Long transactionId) {
+        Transaction transactionToCancel = null;
+
+        for (Transaction transaction : transactions) {
+            if (transaction.getId().equals(transactionId)) {
+                transactionToCancel = transaction;
+                break;
+            }
+        }
+
+
+        if (transactionToCancel != null) {
+            System.out.println("Transaction is cancelled.");
+            System.out.println("Now transaction is going to be refunded");
+            refundTransaction(transactionToCancel.getId());
+            return true;
+        }
+
+        System.out.println("Transaction with the given ID not found.");
+        return false;
+    }
+
+    public boolean refundTransaction(Long transactionId) {
+        Transaction transactionToRefund = null;
+
+        for (Transaction transaction : transactions) {
+            if (transaction.getId().equals(transactionId)) {
+                transactionToRefund = transaction;
+                break;
+            }
+        }
+
+        if (transactionToRefund != null) {
+            if (transactionToRefund.getType().equals("Deposit")) {
+                if (this.balance >= transactionToRefund.getAmount()) {
+                    this.balance -= transactionToRefund.getAmount();
+                    transactions.remove(transactionToRefund);
+                    System.out.println("Deposit transaction refunded successfully.");
+                    return true;
+                } else {
+                    System.out.println("Insufficient balance to refund deposit.");
+                    return false;
+                }
+            } else if (transactionToRefund.getType().equals("Withdrawal")) {
+                this.balance += transactionToRefund.getAmount();
+                transactions.remove(transactionToRefund);
+                System.out.println("Withdrawal transaction refunded successfully.");
+                return true;
+            } else if (transactionToRefund.getType().equals("Transfer")) {
+                Account senderAccount = transactionToRefund.getSenderAccount();
+                Account receiverAccount = transactionToRefund.getReceiverAccount();
+
+                if (senderAccount != null && senderAccount.getTransactions().contains(transactionToRefund)) {
+                    senderAccount.deposit(transactionToRefund.getAmount(), receiverAccount);
+                    transactions.remove(transactionToRefund);
+                    System.out.println("Transfer transaction refunded successfully.");
+                    return true;
+                } else {
+                    System.out.println("Failed to refund transfer transaction.");
+                    return false;
+                }
+            }
+        }
+
+        System.out.println("Transaction with the given ID not found.");
+        return false;
+    }
 
 
 
