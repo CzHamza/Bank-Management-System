@@ -99,5 +99,20 @@ public class Transaction {
         return false;
     }
 
+    public boolean validate() {
+        return id != null && date != null && amount >= 0 && senderAccount != null && receiverAccount != null && !type.isEmpty();
+    }
+
+    public void logTransaction() {
+        System.out.println("Transaction ID: " + id);
+        System.out.println("Date: " + date);
+        System.out.println("Amount: " + amount);
+        System.out.println("Description: " + description);
+        System.out.println("Sender Account: " + senderAccount.getOwner().getName());
+        System.out.println("Receiver Account: " + receiverAccount.getOwner().getName());
+        System.out.println("Type: " + type);
+    }
+
+
 
 }
