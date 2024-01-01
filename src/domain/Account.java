@@ -2,6 +2,7 @@ package domain;
 
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -11,6 +12,15 @@ public class Account {
     private double balance;
     private User owner;
     private List<Transaction> transactions;
+
+    public Account() {
+        this.transactions = new ArrayList<>();
+        this.owner = new User();
+    }
+
+    public Account(User owner) {
+        this.owner = owner;
+    }
 
     public Long getId() {
         return id;

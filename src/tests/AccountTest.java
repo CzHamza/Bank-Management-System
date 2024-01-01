@@ -47,6 +47,7 @@ public class AccountTest {
         assertEquals(initialBalance - withdrawAmount, account.getBalance(), 0.001);
     }
 
+
     @Test
     public void testTransfer() {
         double senderInitialBalance = account.getBalance();
