@@ -138,7 +138,6 @@ public class Account {
             }
         }
 
-
         if (transactionToCancel != null) {
             System.out.println("Transaction is cancelled.");
             System.out.println("Now transaction is going to be refunded");
