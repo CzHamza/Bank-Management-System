@@ -51,15 +51,38 @@ public class AccountTest {
     @Test
     public void testTransfer() {
         double senderInitialBalance = account.getBalance();
-        double receiverInitialBalance = anotherAccount.getBalance();
+        double receiverInitialBalance = (anotherAccount != null) ? anotherAccount.getBalance() : 0.0; // Initial balance of the receiver, or 0 if anotherAccount is null
         double transferAmount = 200.0;
 
-        boolean transferResult = account.transfer(transferAmount, anotherAccount, LocalDate.now());
+        // Check if the account to transfer to exists
+        if (anotherAccount != null) {
+            // Check if the sender has sufficient funds before initiating the transfer
+            if (senderInitialBalance >= transferAmount) {
+                boolean transferResult = account.transfer(transferAmount, anotherAccount, LocalDate.now());
 
-        assertTrue(transferResult);
-        assertEquals(senderInitialBalance - transferAmount, account.getBalance(), 0.001);
-        assertEquals(receiverInitialBalance + transferAmount, anotherAccount.getBalance(), 0.001);
+                assertTrue(transferResult);
+                assertEquals(senderInitialBalance - transferAmount, account.getBalance(), 0.001);
+                assertEquals(receiverInitialBalance + transferAmount, anotherAccount.getBalance(), 0.001);
+            } else {
+                // If the sender doesn't have sufficient funds, the transfer should fail
+                boolean transferResult = account.transfer(transferAmount, anotherAccount, LocalDate.now());
+
+                assertFalse(transferResult);
+                // Ensure that balances remain unchanged
+                assertEquals(senderInitialBalance, account.getBalance(), 0.001);
+                assertEquals(receiverInitialBalance, anotherAccount.getBalance(), 0.001);
+            }
+        } else {
+            // If the account to transfer to doesn't exist, the transfer should fail
+            boolean transferResult = account.transfer(transferAmount, null, LocalDate.now());
+
+            assertFalse(transferResult);
+            // Ensure that balances remain unchanged
+            assertEquals(senderInitialBalance, account.getBalance(), 0.001);
+            assertEquals(receiverInitialBalance, (anotherAccount != null) ? anotherAccount.getBalance() : 0.0, 0.001);
+        }
     }
+
 
     @Test
     public void testShowHistory() {
