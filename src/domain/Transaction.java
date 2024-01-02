@@ -6,6 +6,7 @@ import Services.TransactionLogger;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class Transaction {
     private Long id;
@@ -30,6 +31,22 @@ public class Transaction {
         this.senderAccount = senderAccount;
         this.receiverAccount = receiverAccount;
         this.type = type;
+        this.transactionHistory = new ArrayList<>();
+    }
+    public void generateRandomTransactions(int count) {
+        Random random = new Random();
+
+        for (int i = 0; i < count; i++) {
+            Transaction randomTransaction = new Transaction(
+                    LocalDate.now().minusDays(random.nextInt(30)),
+                    random.nextDouble() * 500,
+                    "Random Transaction " + i,
+                    senderAccount, receiverAccount,
+                    (random.nextBoolean() ? "Deposit" : "Withdrawal")
+            );
+            randomTransaction.setId((long) (i + 2)); // Avoid ID conflicts with existing transactions
+            transactionHistory.add(randomTransaction);
+        }
     }
 
 
@@ -137,6 +154,97 @@ public class Transaction {
         System.out.println("Sender Account: " + senderAccount.getOwner().getName());
         System.out.println("Receiver Account: " + receiverAccount.getOwner().getName());
         System.out.println("Type: " + type);
+    }
+
+    public List<Transaction> getTransactionsByDate(LocalDate date) {
+        List<Transaction> matchingTransactions = new ArrayList<>();
+
+        for (Transaction transaction : transactionHistory) {
+            if (transaction.getDate().equals(date)) {
+                matchingTransactions.add(transaction);
+            }
+        }
+
+        return matchingTransactions;
+    }
+
+    public List<Transaction> getTransactionsByAmount(double amount) {
+        List<Transaction> matchingTransactions = new ArrayList<>();
+
+        for (Transaction transaction : transactionHistory) {
+            if (transaction.getAmount() == amount) {
+                matchingTransactions.add(transaction);
+            }
+        }
+
+        return matchingTransactions;
+    }
+
+    public List<Transaction> getTransactionsByDescription(String description) {
+        List<Transaction> matchingTransactions = new ArrayList<>();
+
+        for (Transaction transaction : transactionHistory) {
+            if (transaction.getDescription().equals(description)) {
+                matchingTransactions.add(transaction);
+            }
+        }
+
+        return matchingTransactions;
+    }
+
+    public List<Transaction> getTransactionsBySenderAccount(Account senderAccount) {
+        List<Transaction> matchingTransactions = new ArrayList<>();
+
+        for (Transaction transaction : transactionHistory) {
+            if (transaction.getSenderAccount().equals(senderAccount)) {
+                matchingTransactions.add(transaction);
+            }
+        }
+
+        return matchingTransactions;
+    }
+
+    public List<Transaction> getTransactionsByReceiverAccount(Account receiverAccount) {
+        List<Transaction> matchingTransactions = new ArrayList<>();
+
+        for (Transaction transaction : transactionHistory) {
+            if (transaction.getReceiverAccount().equals(receiverAccount)) {
+                matchingTransactions.add(transaction);
+            }
+        }
+
+        return matchingTransactions;
+    }
+
+    public List<Transaction> getTransactionsByType(String type) {
+        List<Transaction> matchingTransactions = new ArrayList<>();
+
+        for (Transaction transaction : transactionHistory) {
+            if (transaction.getType().equals(type)) {
+                matchingTransactions.add(transaction);
+            }
+        }
+
+        return matchingTransactions;
+    }
+
+    public List<Transaction> getTransactionsByAllCriteria(
+            LocalDate date, double amount, String description,
+            Account senderAccount, Account receiverAccount, String type) {
+        List<Transaction> matchingTransactions = new ArrayList<>();
+
+        for (Transaction transaction : transactionHistory) {
+            if (transaction.getDate().equals(date) &&
+                    transaction.getAmount() == amount &&
+                    transaction.getDescription().equals(description) &&
+                    transaction.getSenderAccount().equals(senderAccount) &&
+                    transaction.getReceiverAccount().equals(receiverAccount) &&
+                    transaction.getType().equals(type)) {
+                matchingTransactions.add(transaction);
+            }
+        }
+
+        return matchingTransactions;
     }
 
 
