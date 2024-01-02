@@ -7,6 +7,7 @@ import java.util.Date;
 import java.util.List;
 
 public class Account {
+    private static Long nextId = 1L;
     private Long id;
     private String accountType;
     private double balance;
@@ -14,6 +15,7 @@ public class Account {
     private List<Transaction> transactions;
 
     public Account() {
+        this.id = nextId++;
         this.transactions = new ArrayList<>();
         this.owner = new User();
     }

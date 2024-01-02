@@ -3,6 +3,7 @@ package tests;
 import static org.junit.Assert.*;
 
 import domain.Account;
+import domain.DB;
 import domain.Transaction;
 import org.junit.*;
 
@@ -23,6 +24,23 @@ public class AccountTest {
         anotherAccount = new Account();
         anotherAccount.setId(2L);
         anotherAccount.setBalance(500.0);
+    }
+
+    @Test
+    public void testAccountCreation() {
+        Account account = new Account();
+
+        assertNotNull(account.getId());
+        assertEquals(0.0, account.getBalance(), 0.001);
+        assertNotNull(account.getOwner());
+        assertNotNull(account.getTransactions());
+
+        DB database = new DB();
+        database.saveAccount(account);
+        Account retrievedAccount = database.getAccountById(account.getId());
+
+        assertNotNull(retrievedAccount);
+        assertEquals(account.getId(), retrievedAccount.getId());
     }
 
     @Test
