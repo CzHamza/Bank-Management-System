@@ -4,6 +4,7 @@ package domain;
 import Services.TransactionLogger;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 public class Transaction {
@@ -14,6 +15,13 @@ public class Transaction {
     private Account senderAccount;
     private Account receiverAccount;
     private String type;
+
+    private List<Transaction> transactionHistory;
+
+    public Transaction() {
+        this.transactionHistory = new ArrayList<>();
+    }
+
 
     public Transaction(LocalDate date, double amount, String description, Account senderAccount, Account receiverAccount, String type) {
         this.date = date;
@@ -98,6 +106,24 @@ public class Transaction {
         }
         return false;
     }
+
+    public List<Transaction> showHistory() {
+        for(Transaction t : transactionHistory){
+            System.out.println("Transaction id:");
+            System.out.println(t.getId());
+            System.out.println("Transaction date:");
+            System.out.println(t.getDate());
+            System.out.println("Transaction amount:");
+            System.out.println(t.getAmount());
+            System.out.println("Transaction description:");
+            System.out.println(t.getDescription());
+            System.out.println("Transaction type:");
+            System.out.println(t.getType());
+        }
+        System.out.println("Transaction history displayed.");
+        return transactionHistory;
+    }
+
 
     public boolean validate() {
         return id != null && date != null && amount >= 0 && senderAccount != null && receiverAccount != null && !type.isEmpty();
