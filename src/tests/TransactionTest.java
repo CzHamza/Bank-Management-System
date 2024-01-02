@@ -39,26 +39,31 @@ public class TransactionTest {
     public void testMakeTransaction() {
         assertTrue(transaction.makeTransaction());
 
+        // Verify that balances have been updated
         assertEquals(800.0, senderAccount.getBalance(), 0.001);
         assertEquals(700.0, receiverAccount.getBalance(), 0.001);
     }
 
     @Test
     public void testMakeTransactionInsufficientFunds() {
+        // Set an amount greater than the sender's balance
         transaction.setAmount(1200.0);
 
         assertFalse(transaction.makeTransaction());
 
+        // Verify that balances remain unchanged
         assertEquals(1000.0, senderAccount.getBalance(), 0.001);
         assertEquals(500.0, receiverAccount.getBalance(), 0.001);
     }
 
     @Test
     public void testMakeTransactionNegativeAmount() {
+        // Set a negative amount
         transaction.setAmount(-200.0);
 
         assertFalse(transaction.makeTransaction());
 
+        // Verify that balances remain unchanged
         assertEquals(1000.0, senderAccount.getBalance(), 0.001);
         assertEquals(500.0, receiverAccount.getBalance(), 0.001);
     }
@@ -81,9 +86,10 @@ public class TransactionTest {
         List<Transaction> matchingTransactions = transaction.getTransactionsByDate(LocalDate.now());
 
         assertNotNull(matchingTransactions);
-        assertTrue(matchingTransactions.size() >= 1);
+        assertTrue(matchingTransactions.size() >= 1); // At least one transaction should match the current date
     }
 
+    // Add similar tests for other functions such as getTransactionsByAmount, getTransactionsByDescription, etc.
 
     @Test
     public void testGetTransactionsByAllCriteria() {
@@ -93,7 +99,7 @@ public class TransactionTest {
         );
 
         assertNotNull(matchingTransactions);
-        assertTrue(matchingTransactions.size() >= 1);
+        assertTrue(matchingTransactions.size() >= 1); // At least one transaction should match the criteria
     }
 }
 
