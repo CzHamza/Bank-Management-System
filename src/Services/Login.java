@@ -7,6 +7,21 @@ import java.util.Scanner;
 public class Login {
     User user;
     private int maxAttempts = 3;
+    public Login(User user) {
+        this.user = user;
+    }
+
+    public boolean validateUser() {
+        return user != null && user.getPassword().equals("password");
+    }
+
+
+    public boolean changePassword(String password) {
+        if(password != user.getPassword())
+            user.setPassword(password);
+        System.out.println("The password has been changed.");
+        return true;
+    }
 
     public boolean isPasswordCorrect(String enteredPassword) {
         String userPassword = user.getPassword();
