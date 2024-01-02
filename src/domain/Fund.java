@@ -1,4 +1,4 @@
-package deletableClasses;
+package domain;
 
 public class Fund {
     private Long id;
