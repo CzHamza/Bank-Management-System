@@ -1,0 +1,80 @@
+import static org.junit.Assert.*;
+import org.junit.Before;
+import org.junit.Test;
+
+public class TransactionServiceTest {
+    private TransactionLogger transactionLogger;
+    private TransactionProcessor transactionProcessor;
+    private TransactionValidator transactionValidator;
+
+    @Before
+    public void setUp() {
+        transactionLogger = new TransactionLogger();
+        transactionProcessor = new TransactionProcessor();
+        transactionValidator = new TransactionValidator();
+    }
+
+    @Test
+    public void testLogTransaction() {
+        Transaction transaction = new Transaction("sender", "receiver", 100.0);
+        transactionLogger.logTransaction(transaction);
+
+        assertTrue(transactionLogger.retrieveLogs().contains(transaction));
+    }
+
+    @Test
+    public void testValidateTransaction() {
+        Transaction validTransaction = new Transaction("sender", "receiver", 100.0);
+        Transaction invalidTransaction = new Transaction("invalidSender", "receiver", -50.0);
+
+        assertTrue(TransactionProcessor.validateTransaction(validTransaction));
+        assertFalse(TransactionProcessor.validateTransaction(invalidTransaction));
+    }
+
+    @Test
+    public void testUpdateAccountBalance() {
+        Account senderAccount = new Account("sender", 500.0);
+        Account receiverAccount = new Account("receiver", 200.0);
+        double amount = 50.0;
+        Transaction validTransaction = new Transaction(senderAccount, receiverAccount, amount);
+
+        double initialSenderBalance = senderAccount.getBalance();
+        double initialReceiverBalance = receiverAccount.getBalance();
+
+        TransactionProcessor.updateAccountBalance(validTransaction);
+
+        assertEquals(initialSenderBalance - amount, senderAccount.getBalance(), 0.001);
+        assertEquals(initialReceiverBalance + amount, receiverAccount.getBalance(), 0.001);
+    }
+
+    @Test
+    public void testInitiateRefund() {
+        Account senderAccount = new Account("sender", 300.0);
+        Account receiverAccount = new Account("receiver", 100.0);
+        double amount = 30.0;
+        Transaction withdrawalTransaction = new Transaction(senderAccount, receiverAccount, amount, "Withdrawal");
+
+        double initialSenderBalance = senderAccount.getBalance();
+        double initialReceiverBalance = receiverAccount.getBalance();
+
+        assertTrue(TransactionProcessor.initiateRefund(withdrawalTransaction));
+
+        assertEquals(initialSenderBalance + amount, senderAccount.getBalance(), 0.001);
+        assertEquals(initialReceiverBalance - amount, receiverAccount.getBalance(), 0.001);
+    }
+
+    @Test
+    public void testTransactionValidator() {
+        Account senderAccount = new Account("sender", 100.0);
+        Transaction validTransaction = new Transaction(senderAccount, new Account("receiver", 50.0), 30.0);
+        Transaction invalidTransaction = new Transaction(senderAccount, new Account("invalidReceiver", 150.0), 150.0);
+
+        assertTrue(transactionValidator.validate(validTransaction));
+        assertFalse(transactionValidator.validate(invalidTransaction));
+
+        assertTrue(transactionValidator.checkSufficientBalance(validTransaction));
+        assertFalse(transactionValidator.checkSufficientBalance(invalidTransaction));
+    }
+
+    
+}
