@@ -19,6 +19,14 @@ public class Transaction {
 
     private List<Transaction> transactionHistory;
 
+    public List<Transaction> getTransactionHistory() {
+        return transactionHistory;
+    }
+
+    public void setTransactionHistory(List<Transaction> transactionHistory) {
+        this.transactionHistory = transactionHistory;
+    }
+
     public Transaction() {
         this.transactionHistory = new ArrayList<>();
     }
