@@ -11,8 +11,8 @@ public class Login {
         this.user = user;
     }
 
-    public boolean validateUser() {
-        return user != null && user.getPassword().equals("password");
+    public boolean validateUser(String password) {
+        return user != null && user.getPassword().equals(password);
     }
 
 
