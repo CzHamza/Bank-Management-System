@@ -8,7 +8,7 @@ import domain.User;
 public class App {
 
     public static void main(String[] args) {
-        User user = new User("username", "password");
+        User user = new User("admin", "12345");
         Login login = new Login(user);
         Dashboard dashboard = new Dashboard();
         Fund funds = new Fund();
