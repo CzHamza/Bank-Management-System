@@ -1,19 +1,20 @@
 package Services;
 import domain.Image;
+import domain.User;
 
 public class UserProfile {
-    private UserData userData;
+    private User userData;
 
     public UserProfile() {
-        this.userData = new UserData("testuser", "testemail@example.com");
+        this.userData = new User("testuser", "testemail@example.com");
     }
 
-    public UserData showProfile() {
+    public User showProfile() {
         System.out.println("Profile displayed.");
         return userData;
     }
 
-    public boolean editProfile(UserData newData) {
+    public boolean editProfile(User newData) {
         System.out.println("Profile edited.\nNew Username: " + newData.getUsername());
         this.userData = newData;
         return true;
@@ -30,29 +31,4 @@ public class UserProfile {
         return "Profile Picture Path";
     }
 
-    public static class UserData {
-        private String username;
-        private String email;
-
-        public UserData(String username, String email) {
-            this.username = username;
-            this.email = email;
-        }
-
-        public String getUsername() {
-            return username;
-        }
-
-        public void setUsername(String username) {
-            this.username = username;
-        }
-
-        public String getEmail() {
-            return email;
-        }
-
-        public void setEmail(String email) {
-            this.email = email;
-        }
-    }
 }
